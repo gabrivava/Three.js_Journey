@@ -29,4 +29,28 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
-renderer.render(scene, camera)
+
+// Time
+let time = Date.now();
+
+// Animation
+function tick() {
+
+    // Time
+    const currentTime = Date.now();
+    const deltaTime = currentTime - time;
+    time = currentTime;
+
+    console.log(deltaTime);
+
+    // Update object
+    mesh.rotation.x += 0.001 * deltaTime
+
+    // Render
+    renderer.render(scene, camera)
+
+    // FrameRate
+    window.requestAnimationFrame(tick)
+}
+
+tick()
