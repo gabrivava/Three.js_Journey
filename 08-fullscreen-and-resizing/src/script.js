@@ -47,15 +47,33 @@ window.addEventListener('resize', () =>
 // Funzione al doppio click
 window.addEventListener('dblclick', () =>
 {
-    if (!document.fullscreenElement) 
+    // fix on sfari
+    const fullscreenElement = document.fullscreenElement || document.wekitFullscreenElement
+
+
+    if (!fullscreenElement) 
     {
-        // console.log('go fullscreen');
-        canvas.requestFullscreen()
+        // if the browser already support request Fullscreen it's going to call canvas.requestFullscreen()
+        if (canvas.requestFullscreen) 
+        {
+            canvas.requestFullscreen()
+        }
+        // if not js check if webkitRequestFullscreen exists and call canvas.webkitRequestFullscreen()
+        else if (canvas.webkitRequestFullscreen)
+        {
+            canvas.webkitRequestFullscreen()
+        }
     } 
     else 
     {
-        // console.log('leave fullscreen');
-        document.exitFullscreen()
+        if (document.exitFullscreen) 
+        {
+            document.exitFullscreen()
+        }
+        else if (document.webkitExitFullscreen)
+        {
+            document.webkitExitFullscreen()
+        }
     }
 })
 
