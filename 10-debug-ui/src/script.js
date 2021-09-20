@@ -9,10 +9,21 @@ import * as dat from 'dat.gui'
  * 
  * Single element in UI calls Twicks
  */
-const gui = new dat.GUI()
+const gui = new dat.GUI({
+    closed: true,
+    width: 400
+})
 
 const parameters = {
-    color: 0xff0000
+    color: 0xff0000,
+    spin: () =>
+    {
+        gsap.to(mesh.rotation, 
+            {
+                duration: 1,
+                y: mesh.rotation.y + Math.PI * 2
+            })
+    }
 }
 
 gui
@@ -21,6 +32,9 @@ gui
     {
         material.color.set(parameters.color)
     })
+
+gui
+    .add(parameters, 'spin')
 
 /**
  * Base
