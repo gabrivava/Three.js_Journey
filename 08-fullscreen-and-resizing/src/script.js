@@ -39,6 +39,8 @@ window.addEventListener('resize', () =>
 
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
+    // Set pixelRation (pc: 1, smatphone: also 5) whe have to limit it
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 })
 
