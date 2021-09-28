@@ -1,6 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+/* Import one
+import doorImg from './door.jpg'
+
+console.log(doorImg); */
 
 /**
  * Base
