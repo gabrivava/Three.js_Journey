@@ -7,7 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
  */
 const loadingManager = new THREE.LoadingManager()
 
-loadingManager.onStart = () =>
+/* loadingManager.onStart = () =>
 {
     console.log('onStart');
 }
@@ -22,7 +22,7 @@ loadingManager.onProgress = () =>
 loadingManager.onError = () =>
 {
     console.log('onError');
-}
+} */
 
 const textureLoader = new THREE.TextureLoader(loadingManager)
 const colorTexture = textureLoader.load('/textures/door/color.jpg')  
@@ -33,6 +33,13 @@ const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclus
 const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')    
 const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')    
 
+colorTexture.repeat.x = 2
+colorTexture.repeat.y = 2
+
+// colorTexture.wrapS = THREE.RepeatWrapping
+colorTexture.wrapT = THREE.RepeatWrapping
+
+colorTexture.wrapS = THREE.MirroredRepeatWrapping
 
 
 /**
