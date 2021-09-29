@@ -33,13 +33,19 @@ const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclus
 const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')    
 const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')    
 
-colorTexture.repeat.x = 2
+/* colorTexture.repeat.x = 2
 colorTexture.repeat.y = 2
-
 // colorTexture.wrapS = THREE.RepeatWrapping
 colorTexture.wrapT = THREE.RepeatWrapping
-
 colorTexture.wrapS = THREE.MirroredRepeatWrapping
+
+colorTexture.offset.x = 0.5
+colorTexture.offset.y = 0.5 */
+
+colorTexture.rotation = Math.PI / 4 // for a 180° rotation = PI
+// position of the pivot point
+colorTexture.center.x = 0.5
+colorTexture.center.y = 0.5 
 
 
 /**
