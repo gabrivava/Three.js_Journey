@@ -5,23 +5,22 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 /**
  * Texture
  */
-const image = new Image()
-const texture = new THREE.Texture(image)
-
-
-image.onload = () => 
-{
-    // console.log('image load');
-    // inside here the image is create and we need to tranform it to texture
-
-    /* const texture = new THREE.Texture(image)
-    console.log(texture); */
-
-    texture.needsUpdate = true
-
-}
-
-image.src = '/textures/door/color.jpg'
+const textureLoader = new THREE.TextureLoader()
+const texture = textureLoader.load(
+    '/textures/door/color.jpg',
+    () =>
+    {
+        console.log('load');
+    },
+    () =>
+    {0
+        console.log('progress');
+    },
+    () =>
+    {
+        console.log('error');
+    }
+    )
 
 /**
  * Base
