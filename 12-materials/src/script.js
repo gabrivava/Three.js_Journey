@@ -3,6 +3,21 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+
+const doorColorTexture = textureLoader.load('./textures/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('./textures/door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load('./textures/door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('./textures/door/height.jpg')
+const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg')
+const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg')
+const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg')
+const matcapTexture = textureLoader.load('./textures/matcaps/1.png')
+const gradientTexture = textureLoader.load('./textures/gradients/3.jpg')
+
+/**
  * Base
  */
 // Canvas
@@ -14,7 +29,14 @@ const scene = new THREE.Scene()
 /**
  * Objects
  */
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const material = new THREE.MeshBasicMaterial()
+material.map = doorColorTexture 
+// material.color = new THREE.Color('red')
+// material.opacity = 0.5
+material.transparent = true
+material.alphaMap = doorAlphaTexture
+material.side = THREE.DoubleSide
+
 
 const sphere = new THREE.Mesh(
     // geometry
@@ -92,7 +114,14 @@ const clock = new THREE.Clock()
 
 const tick = () =>
 {
+    // Value of time pass since the load of the page
     const elapsedTime = clock.getElapsedTime()
+
+    // Update object
+    sphere.rotation.y = 0.1 * elapsedTime
+    plane.rotation.y = 0.3 * elapsedTime
+    torus.rotation.y = 0.4 * elapsedTime
+
 
     // Update controls
     controls.update()
