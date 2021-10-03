@@ -2,6 +2,8 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import { HemisphereLightHelper, PointLightHelper } from 'three'
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
 
 /**
  * Base
@@ -15,17 +17,90 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-scene.add(ambientLight)
+// Light that illuminate object uniform
+const ambientLight = new THREE.AmbientLight()
+ambientLight.color = new THREE.Color(0xffffff)
+ambientLight.intensity = 0.5
+// scene.add(ambientLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+// Add to gui
+gui.add(ambientLight, 'intensity').min(0).max(1).step(0.01)
+
+// Directional Light
+const directionalLight = new THREE.DirectionalLight()
+directionalLight.position.set(1, 0.25, 0)
+// scene.add(directionalLight)
+// gui
+const parameters = {
+    color: 0xffffff
+}
+gui.addColor(parameters, 'color').onChange(() => {
+    directionalLight.color.set(parameters.color)
+})
+gui.add(directionalLight.position, 'x').min(-2).max(2).step(0.05)
+
+// Hemisphere Light
+const hemisphereLiht = new THREE.HemisphereLight('blue', 'green', 0.4)
+// scene.add(hemisphereLiht)
+
+// Poit Light
+const pointLight = new THREE.PointLight(0xff0000, 0.5, 4)
+pointLight.position.set(1, 1, 0)
+gui.add(pointLight.position, 'x').min(-2).max(2).step(0.1)
+// scene.add(pointLight)
+
+// AreaLight
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 2, 1)
+rectAreaLight.position.set(1, 0, 0)
+gui.add(rectAreaLight, 'intensity').min(1).max(20).step(1)
+gui.add(rectAreaLight.position, 'x').min(-2).max(2).step(0.1).onChange(() => {
+    rectAreaLight.lookAt(new THREE.Vector3())
+})
+gui.add(rectAreaLight.position, 'y').min(-2).max(2).step(0.1).onChange(() => {
+    rectAreaLight.lookAt(new THREE.Vector3())
+})
+gui.add(rectAreaLight.position, 'z').min(-2).max(2).step(0.1).onChange(() => {
+    rectAreaLight.lookAt(new THREE.Vector3())
+})
+rectAreaLight.lookAt(new THREE.Vector3())
+scene.add(rectAreaLight)
+
+// SpotLight
+const spotLight = new THREE.SpotLight(0xffffff, 0.5, 6, Math.PI *0.1, 0.25, 1)
+scene.add(spotLight)
+
+spotLight.target.position.x = -1
+spotLight.target.position.y = -1
+scene.add(spotLight.target)
+
+
+/**
+ * Helpers
+ */
+const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLiht, 0.2)
+scene.add(hemisphereLightHelper)
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
+scene.add(directionalLightHelper)
+
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
+scene.add (pointLightHelper)
+
+const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+scene.add(spotLightHelper)
+// have to update manually
+
+// on the next frame call update
+window.requestAnimationFrame(() => {
+    spotLightHelper.update()
+})
+
+const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
+scene.add(rectAreaLightHelper)
 
 /**
  * Objects
