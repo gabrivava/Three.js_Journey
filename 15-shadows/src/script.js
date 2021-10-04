@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import { DirectionalLight } from 'three'
 
 /**
  * Base
@@ -33,6 +34,17 @@ gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
 scene.add(directionalLight)
 
 directionalLight.castShadow = true
+
+// console.log(directionalLight.shadow);
+directionalLight.shadow.mapSize.width = 1024
+directionalLight.shadow.mapSize.height = 1024
+directionalLight.shadow.camera.near = 1
+directionalLight.shadow.camera.far = 6
+
+// controll the nearest and farest 
+const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+scene.add(directionalLightHelper)
+
 
 /**
  * Materials
