@@ -5,6 +5,12 @@ import * as dat from 'dat.gui'
 import { DirectionalLight } from 'three'
 
 /**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+const bakedShadow = textureLoader.load('textures/bakedShadow.jpg')
+
+/**
  * Base
  */
 // Debug
@@ -103,7 +109,9 @@ sphere.castShadow = true
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
-    material
+    new THREE.MeshBasicMaterial({
+        map: bakedShadow
+    })
 )
 plane.receiveShadow = true
 plane.rotation.x = - Math.PI * 0.5
@@ -157,7 +165,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-renderer.shadowMap.enabled = true
+renderer.shadowMap.enabled = false
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 /**
