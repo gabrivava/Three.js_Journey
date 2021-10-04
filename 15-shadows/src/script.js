@@ -31,20 +31,58 @@ gui.add(directionalLight, 'intensity').min(0).max(1).step(0.001)
 gui.add(directionalLight.position, 'x').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
-scene.add(directionalLight)
+// scene.add(directionalLight)
 
 directionalLight.castShadow = true
 
 // console.log(directionalLight.shadow);
 directionalLight.shadow.mapSize.width = 1024
 directionalLight.shadow.mapSize.height = 1024
+directionalLight.shadow.camera.top = 2
+directionalLight.shadow.camera.bottom = - 2
+directionalLight.shadow.camera.left = - 2
+directionalLight.shadow.camera.right = 2 
 directionalLight.shadow.camera.near = 1
 directionalLight.shadow.camera.far = 6
+directionalLight.shadow.radius = 10
 
 // controll the nearest and farest 
 const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+directionalLightHelper.visible = false
 scene.add(directionalLightHelper)
 
+
+// Spot Light
+const spotLight = new THREE.SpotLight(0xffffff, 0.4, 10, Math.PI * 0.3)
+spotLight.castShadow = true
+spotLight.shadow.mapSize.width = 1024
+spotLight.shadow.mapSize.height = 1024
+spotLight.shadow.camera.fov = 30
+spotLight.shadow.camera.near = 1
+spotLight.shadow.camera.far = 6
+spotLight.position.set(0, 2, 2)
+// scene.add(spotLight);
+
+const spotLightCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera)
+spotLightCameraHelper.visible = false
+// scene.add(spotLightCameraHelper)
+
+
+// Point Light
+const pointLight = new THREE.PointLight(0xffffff, 0.3)
+pointLight.castShadow = true
+pointLight.shadow.mapSize.width = 1024
+pointLight.shadow.mapSize.height = 1024
+pointLight.shadow.camera.near = 0.1
+pointLight.shadow.camera.far = 5
+
+
+pointLight.position.set( -1, 1, 0)
+scene.add(pointLight)
+
+const pointLighCamerahelper = new THREE.CameraHelper(pointLight.shadow.camera)
+pointLighCamerahelper.visible = false
+scene.add(pointLighCamerahelper)
 
 /**
  * Materials
@@ -120,6 +158,7 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 /**
  * Animate
