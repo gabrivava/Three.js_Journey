@@ -46,7 +46,14 @@ const rayOrigin = new THREE.Vector3(-3, 0, 0)
 const rayDirection = new THREE.Vector3(10, 0, 0)
 // riduce la dimensione del vector3 ma mantiene la direzione
 rayDirection.normalize()
-// raycaster.set()
+
+raycaster.set(rayOrigin, rayDirection)
+
+const intersect = raycaster.intersectObject(object2)
+console.log(intersect);
+
+const intersects = raycaster.intersectObjects[object1, object2, object3]
+console.log(intersects);
 
 /**
  * Sizes
