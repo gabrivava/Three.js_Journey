@@ -2,6 +2,12 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import CANNON from 'cannon'
+
+/**
+ * Theory
+ */
+/* We duplicate things inside the physics world and on each frame update the physics world, take the cordinate and put them back to the THREE.js object*/
 
 /**
  * Debug
@@ -31,6 +37,33 @@ const environmentMapTexture = cubeTextureLoader.load([
     '/textures/environmentMaps/0/pz.png',
     '/textures/environmentMaps/0/nz.png'
 ])
+
+/**
+ * Physics
+ */
+// Create world
+const world = new CANNON.World()
+world.gravity.set(0, -9.81, 0)
+
+// Sphere
+const sphereShape = new CANNON.Sphere(0.5) 
+const sphereBody = new CANNON.Body({
+    mass: 1,
+    position: new CANNON.Vec3(0, 3, 0),
+    shape: sphereShape
+})
+world.addBody(sphereBody)
+
+// Floor
+const floorShape = new CANNON.Plane()
+const floorBody = new CANNON.Body() // it's possible to chanege things in Body() after the instantiation
+floorBody.mass = 0
+floorBody.addShape(floorShape)
+floorBody.quaternion.setFromAxisAngle( 
+    new CANNON.Vec3(-1, 0, 0), 
+    Math.PI * 0.5
+)
+world.addBody(floorBody)
 
 /**
  * Test sphere
@@ -130,10 +163,25 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
+let oldElapsedTime = 0
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - oldElapsedTime
+    
+    oldElapsedTime = elapsedTime
+
+    // 1. Update physics world
+    world.step(1/ 60, deltaTime, 3)
+
+    // 2. take the cordinate and apply to three.js object
+    /* sphere.position.x = sphereBody.position.x
+    sphere.position.y = sphereBody.position.y
+    sphere.position.z = sphereBody.position.z */
+
+    // Use Copy() instead
+    sphere.position.copy(sphereBody.position)
 
     // Update controls
     controls.update()
